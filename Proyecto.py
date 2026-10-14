@@ -15,7 +15,10 @@ def buscar():
                 if x == y.lower():
                     cont += 1
                     break
-    print(f"Se encontro {x} en {cont} registros")
+    if cont == 0:
+        print(f"No se encontro {x} en ningun registro")
+    else:
+        print(f"Se encontro {x} en {cont} registros")
 
 
 #funcion para imprimir el top de juegos segun lo desea el usuario
