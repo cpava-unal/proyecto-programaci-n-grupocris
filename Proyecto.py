@@ -17,4 +17,15 @@ def buscar():
                     break
     print(f"Se encontro {x} en {cont} registros")
 
+
+#funcion para imprimir el top de juegos segun lo desea el usuario
+def topgames():
+    top = int(input("Ingrese el top de juegos que desea Consultar: "))
+    print(f"El top {top} de juegos mas vendidos son:")
+    print("# | Nombre del Juego                              |         Desarrolador         | Plataforma |  Año   |")
+    for i in setdatos[1:top+1]:
+        print(f"{i[0]:^2}| {i[1]:<45} | {i[4]:^28} | {i[2]:^10} | {i[8]:^6} |")
+
+#llamado de funciones
 buscar()
+topgames()
