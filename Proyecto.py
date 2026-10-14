@@ -13,8 +13,8 @@ def buscar():
         for y in setdatos[i]:
             if x in y.lower():
                 if x == y.lower():
+                    cont += 1
                     break
-                cont += 1
     print(f"Se encontro {x} en {cont} registros")
 
 buscar()
