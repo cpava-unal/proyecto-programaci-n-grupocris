@@ -29,6 +29,55 @@ def topgames():
     for i in setdatos[1:top+1]:
         print(f"{i[0]:^2}| {i[1]:<45} | {i[4]:^28} | {i[2]:^10} | {i[8]:^6} |")
 
+#Función estadística
+def estadist():
+    a = 1
+    calculo = []
+    while a != 0:
+        option = input("[---MENÚ---]\nPor favor, elija la categoría para la cuál desea conocer información estadística:\n 1. Puntuación de los Críticos\n 2. Puntuación de los usuarios\n 3. Total Vendidos\n 4. Año de publicación\n 5. Salir\n")
+        if option == "1":
+            for j in range(1,len(setdatos[1:])+1):
+                calculo.append(setdatos[j][5])
+            calcfloat = [float(x) for x in calculo if x.strip() != '']
+            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            maxc = max(calcfloat)
+            minc = min(calcfloat)
+            print(f"[---RESULTADO---]\nPara las puntuaciones de los críticos, tenemos:\nEl promedio: {promc:.1f}\nEl número máximo: {maxc}\nEl número mínimo: {minc}.")
+            calculo = []
+        elif option == "2":
+            for j in range(1,len(setdatos[1:])+1):
+                calculo.append(setdatos[j][6])
+            calcfloat = [float(x) for x in calculo if x.strip() != '']
+            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            maxc = max(calcfloat)
+            minc = min(calcfloat)
+            print(f"[---RESULTADO---]\nPara las puntuaciones de los usuarios, tenemos:\nEl promedio: {promc:.1f}\nEl número máximo: {maxc}\nEl número mínimo: {minc}.")
+            calculo = []
+        elif option == "3":
+            for j in range(1,len(setdatos[1:])+1):
+                calculo.append(setdatos[j][7])
+            calcfloat = [float(x) for x in calculo if x.strip() != '']
+            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            maxc = max(calcfloat)
+            minc = min(calcfloat)
+            print(f"[---RESULTADO---]\nPara las ventas totales, tenemos:\nEl promedio: {promc:.1f}\nEl número máximo: {maxc}\nEl número mínimo: {minc}.")
+            calculo = []
+        elif option == "4":
+            for j in range(1,len(setdatos[1:])+1):
+                calculo.append(setdatos[j][8])
+            calcfloat = [float(x) for x in calculo if x.strip() != '']
+            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            maxc = max(calcfloat)
+            minc = min(calcfloat)
+            print(f"[---RESULTADO---]\nPara los años de publicación, tenemos:\nEl promedio: {promc:.1f}\nEl número máximo: {maxc:.0f}\nEl número mínimo: {minc:.0f}")
+            calculo = []
+        elif option == "5":
+            print("¡Muchas gracias!")
+            break
+        else:
+            print("Opción ingresada no es válida, por favor vuelve a intentarlo.")
+
 #llamado de funciones
 buscar()
 topgames()
+estadist()
