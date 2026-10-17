@@ -1,15 +1,16 @@
 from functools import reduce
-setdatos = []
 
+setdatos = [] #Se crea una lista para caergar el csv
 
+#abrimos el archivo y lo cargamos en la lista
 with open ("gsales50.csv", "r")  as f:
     for linea in f:
         setdatos.append(linea.strip().split(","))
 
+#Funciones
 def buscar():
     a = True
     while a:
-        print("Se le pedira que ingrese el nombre de lo que desee buscar, y se le dara en cuantos registros se encuentra")
         x = input("Ingrese que desea buscar: ").lower()
         cont = 0
         print(" | ".join(setdatos[0]))
@@ -21,89 +22,31 @@ def buscar():
                         print(" | ".join(setdatos[i]))
                         break
         if cont == 0:
-            print(f"No se encontro {x} en ningun registro")
-            print("Si desea volver a intentar buscar un registro, ingrese (si)")
-            print("Si desea salir de la busqueda, ingrese (no)")
-            print("Ingresar algo distinto a estos dos, se cerrara la busqueda")
+            print(f" No se encontro {x} en ningun registro\n")
+            print(" Si desea seguir buscando? (si/no)")
+            print(" Ingresar algo distinto a estos dos, se volvera al menu principal")
             sino = input().lower()
             if sino == "si":
                 a = True
             elif sino == "no":
                 a = False
             else:
-                print("Opcion invalida, se cerrara la busqueda")
+                print(" Opcion invalida, se cerrara la busqueda")
                 a = False
         else:
-            print(f"Se encontro {x} en {cont} registros")
-            print("Si desea buscar otro registro, ingrese (si)")
-            print("Si desea salir de la busqueda, ingrese (no)")
-            print("Ingresar algo distinto a estos dos, se cerrara la busqueda")
+            print(f" Se encontro {x} en {cont} registros\n")
+            print(" Si desea seguir buscando? (si/no)")
+            print(" Ingresar algo distinto a estos dos, se volvera al menu principal")
             sino = input().lower()
             if sino == "si":
                 a = True
             elif sino == "no":
                 a = False
             else:
-                print("Opcion invalida, se cerrara la busqueda")
+                print(" Opcion invalida, volviendo al menu principal...")
                 a = False
 
 
-#funcion para imprimir el top de juegos segun lo desea el usuario
-def topgames():
-    top = int(input("Ingrese el top de juegos que desea Consultar: "))
-    print(f"El top {top} de juegos mas vendidos son:")
-    print("# | Nombre del Juego                              |         Desarrolador         | Plataforma |  Año   |")
-    for i in setdatos[1:top+1]:
-        print(f"{i[0]:^2}| {i[1]:<45} | {i[4]:^28} | {i[2]:^10} | {i[8]:^6} |")
-
-#Función estadística
-def estadist():
-    a = 1
-    calculo = []
-    while a != 0:
-        option = input("[---MENÚ---]\nPor favor, elija la categoría para la cuál desea conocer información estadística:\n 1. Puntuación de los Críticos\n 2. Puntuación de los usuarios\n 3. Total Vendidos\n 4. Año de publicación\n 5. Salir\n")
-        if option == "1":
-            for j in range(1,len(setdatos[1:])+1):
-                calculo.append(setdatos[j][5])
-            calcfloat = [float(x) for x in calculo if x.strip() != '']
-            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
-            maxc = max(calcfloat)
-            minc = min(calcfloat)
-            print(f"[---RESULTADO---]\nPara las puntuaciones de los críticos, tenemos:\nEl promedio: {promc:.1f}\nEl número máximo: {maxc}\nEl número mínimo: {minc}.")
-            calculo = []
-        elif option == "2":
-            for j in range(1,len(setdatos[1:])+1):
-                calculo.append(setdatos[j][6])
-            calcfloat = [float(x) for x in calculo if x.strip() != '']
-            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
-            maxc = max(calcfloat)
-            minc = min(calcfloat)
-            print(f"[---RESULTADO---]\nPara las puntuaciones de los usuarios, tenemos:\nEl promedio: {promc:.1f}\nEl número máximo: {maxc}\nEl número mínimo: {minc}.")
-            calculo = []
-        elif option == "3":
-            for j in range(1,len(setdatos[1:])+1):
-                calculo.append(setdatos[j][7])
-            calcfloat = [float(x) for x in calculo if x.strip() != '']
-            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
-            maxc = max(calcfloat)
-            minc = min(calcfloat)
-            print(f"[---RESULTADO---]\nPara las ventas totales, tenemos:\nEl promedio: {promc:.1f}\nEl número máximo: {maxc}\nEl número mínimo: {minc}.")
-            calculo = []
-        elif option == "4":
-            for j in range(1,len(setdatos[1:])+1):
-                calculo.append(setdatos[j][8])
-            calcfloat = [float(x) for x in calculo if x.strip() != '']
-            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
-            maxc = max(calcfloat)
-            minc = min(calcfloat)
-            print(f"[---RESULTADO---]\nPara los años de publicación, tenemos:\nEl promedio: {promc:.1f}\nEl número máximo: {maxc:.0f}\nEl número mínimo: {minc:.0f}")
-            calculo = []
-        elif option == "5":
-            print("¡Muchas gracias!")
-            break
-        else:
-            print("Opción ingresada no es válida, por favor vuelve a intentarlo.")
-    
 #Función filtrar 
 def filtrar_por_condicion_numerica(datos, indice_columna, valor_limite):
     """
@@ -192,8 +135,136 @@ def menu_filtrar_por_condicion(datos):
             # imprimir campos clave: nombre, plataforma y el Valor filtrado
             print(f"- {reg[1]} ({reg[2]}) -> {nombre_col}: {reg[idx_col]}")
 
-#llamado de funciones
-buscar()
-topgames()
-estadist()
-menu_filtrar_por_condicion(setdatos)
+
+
+def topgames(top):
+    """
+    Esta funcion le piede al usuario un numero, 
+    despues imprime una tabla con la lista del top videojuegos que quizo consultar
+    El data set ya esta ordenado de esa forma, solo es necesario imprimir las columnas deseadas
+    """
+    print(f"El top {top} de juegos mas vendidos son:")
+    print("# | Nombre del Juego                              |         Desarrolador         | Plataforma |  Año   |")
+    for i in setdatos[1:top+1]:
+        print(f"{i[0]:^2}| {i[1]:<45} | {i[4]:^28} | {i[2]:^10} | {i[8]:^6} |")
+
+
+
+def estadist():
+    a = 1
+    calculo = []
+    while a != 0:
+        option = input("\n [---MENÚ ESTADITICAS---]\n"
+                        " Por favor, elija la categoría para la cuál desea conocer información estadística:\n" 
+                        " 1. Puntuación de los Críticos\n"
+                        " 2. Puntuación de los usuarios\n"
+                        " 3. Total Vendidos\n"
+                        " 4. Año de publicación\n" 
+                        " 5. Volver al Menú Principal\n"
+                        " Opcion: "
+                        )
+        if option == "1":
+            for j in range(1,len(setdatos[1:])+1):
+                calculo.append(setdatos[j][5])
+            calcfloat = [float(x) for x in calculo if x.strip() != '']
+            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            maxc = max(calcfloat)
+            minc = min(calcfloat)
+            print("\n  [---RESULTADO CRITICOS---]\n"
+                  "  Para las puntuaciones de los críticos, tenemos:\n"
+                  f"  El promedio: {promc:.1f}\n"
+                  f"  El número máximo: {maxc}\n"
+                  f"  El número mínimo: {minc}."
+                  )
+            calculo = []
+        elif option == "2":
+            for j in range(1,len(setdatos[1:])+1):
+                calculo.append(setdatos[j][6])
+            calcfloat = [float(x) for x in calculo if x.strip() != '']
+            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            maxc = max(calcfloat)
+            minc = min(calcfloat)
+            print("\n  [---RESULTADO USUARIOS---]\n"
+                   "  Para las puntuaciones de los usuarios, tenemos:\n"
+                   f"  El promedio: {promc:.1f}\n"
+                   f"  El número máximo: {maxc}\n"
+                   f"  El número mínimo: {minc}."
+                   )
+            calculo = []
+        elif option == "3":
+            for j in range(1,len(setdatos[1:])+1):
+                calculo.append(setdatos[j][7])
+            calcfloat = [float(x) for x in calculo if x.strip() != '']
+            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            maxc = max(calcfloat)
+            minc = min(calcfloat)
+            print(f"\n  [---RESULTADO VENTAS---]\n"
+                    "  Para las ventas totales, tenemos:\n"
+                    f"  El promedio: {promc:.1f}\n"
+                    f"  El número máximo: {maxc}\n"
+                    f"  El número mínimo: {minc}."
+                    )
+            calculo = []
+        elif option == "4":
+            for j in range(1,len(setdatos[1:])+1):
+                calculo.append(setdatos[j][8])
+            calcfloat = [float(x) for x in calculo if x.strip() != '']
+            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            maxc = max(calcfloat)
+            minc = min(calcfloat)
+            print("\n  [---RESULTADO AÑOS---]\n"
+                "  Para los años de publicación, tenemos:\n"
+                f"  El promedio: {promc:.1f}\n"
+                f"  El número máximo: {maxc:.0f}\n"
+                f"  El número mínimo: {minc:.0f}"
+                )
+            calculo = []
+        elif option == "5":
+            print("  Regresando al Menú Principal...")
+            break
+        else:
+            print("Opción ingresada no es válida, por favor vuelve a intentarlo.")
+
+#menu principal
+
+print("\nProyecto de Programación GSales\n" 
+        "Primera Entrega\n"
+        "\n Integrantes:"
+        "\n   "
+        "\n   Henry Andres Fernandez Lozano"
+        "\n   "
+        "\n   "
+        "\n DataSet Escogido: Video Game Sales Data\n"
+        " link: https://www.kaggle.com/datasets/holmjason2/videogamedata"
+        )
+#Menu principal
+"""
+El menu donde se ejecutan las funciones
+las funciones de Buscar() y estadist() no tienen parametros ya que esas llevan a sus propios submenus donde se piden los valores a consultar
+la funcion topgames() pide el parametro ya que es una funcion sencilla
+La funcion menu_filtrar_por_condicion() pide como parametro la lista del dataset
+"""
+menu = str()
+while menu != 0:
+    menu = input("\n[-----MENU PRINCIPAL-----]\n"
+                "1. Busqueda Por Terminos\n"
+                "2. Filtrar Por condicion\n"
+                "3. Consular Top Juegos Vendidos\n"
+                "4. Estadisticas\n"
+                "5. Salir\n"
+                "Ingrese Una Opcion: ")
+    
+    if menu == "1":
+        buscar()
+    elif menu == "2":
+        menu_filtrar_por_condicion(setdatos)
+    elif menu == "3":
+        topconsultado = int(input("Ingrese el top de juegos que desea Consultar: "))
+        topgames(topconsultado)
+    elif menu == "4":
+        estadist()
+    elif menu == "5":
+        print("Cerrando Programa... Gracias por Consultar!")
+        break
+    else:
+        print("Opcion Invalida, Intentelo denuevo. ")
