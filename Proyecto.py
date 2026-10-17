@@ -196,4 +196,4 @@ def menu_filtrar_por_condicion(datos):
 buscar()
 topgames()
 estadist()
-filtrar_por_condicion_numerica(datos, indice_columna, valor_limite)
+menu_filtrar_por_condicion(setdatos)
