@@ -7,19 +7,45 @@ with open ("gsales50.csv", "r")  as f:
         setdatos.append(linea.strip().split(","))
 
 def buscar():
-    print("Se le pedira que ingrese el nombre de lo que desee buscar, y se le dara en cuantos registros se encuentra")
-    x = input("Ingrese que desea buscar: ").lower()
-    cont = 0
-    for i in range(len(setdatos)):
-        for y in setdatos[i]:
-            if x in y.lower():
-                if x == y.lower():
-                    cont += 1
-                    break
-    if cont == 0:
-        print(f"No se encontro {x} en ningun registro")
-    else:
-        print(f"Se encontro {x} en {cont} registros")
+    a = True
+    while a:
+        print("Se le pedira que ingrese el nombre de lo que desee buscar, y se le dara en cuantos registros se encuentra")
+        x = input("Ingrese que desea buscar: ").lower()
+        cont = 0
+        print(" | ".join(setdatos[0]))
+        for i in range(len(setdatos)):
+            for y in setdatos[i]:
+                if x in y.lower():
+                    if x == y.lower():
+                        cont += 1
+                        print(" | ".join(setdatos[i]))
+                        break
+        if cont == 0:
+            print(f"No se encontro {x} en ningun registro")
+            print("Si desea volver a intentar buscar un registro, ingrese (si)")
+            print("Si desea salir de la busqueda, ingrese (no)")
+            print("Ingresar algo distinto a estos dos, se cerrara la busqueda")
+            sino = input().lower()
+            if sino == "si":
+                a = True
+            elif sino == "no":
+                a = False
+            else:
+                print("Opcion invalida, se cerrara la busqueda")
+                a = False
+        else:
+            print(f"Se encontro {x} en {cont} registros")
+            print("Si desea buscar otro registro, ingrese (si)")
+            print("Si desea salir de la busqueda, ingrese (no)")
+            print("Ingresar algo distinto a estos dos, se cerrara la busqueda")
+            sino = input().lower()
+            if sino == "si":
+                a = True
+            elif sino == "no":
+                a = False
+            else:
+                print("Opcion invalida, se cerrara la busqueda")
+                a = False
 
 
 #funcion para imprimir el top de juegos segun lo desea el usuario
