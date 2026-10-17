@@ -230,7 +230,7 @@ def estadist():
 print("\nProyecto de Programación GSales\n" 
         "Primera Entrega\n"
         "\n Integrantes:"
-        "\n   "
+        "\n   Edwin Andres Niño Garcia"
         "\n   Henry Andres Fernandez Lozano"
         "\n   "
         "\n   "
