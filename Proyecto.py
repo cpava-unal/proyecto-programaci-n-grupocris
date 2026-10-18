@@ -234,7 +234,7 @@ print("\nProyecto de Programación GSales\n"
         "\n   Henry Andres Fernandez Lozano"
         "\n   Emmanuel Diaz Montes"
         "\n   Camilo Alejandro Arevalo Inampues"
-        "\n   Cristhian Sosyaer Pava Mendoza
+        "\n   Cristhian Sosyaer Pava Mendoza"
         "\n DataSet Escogido: Video Game Sales Data\n"
         " link: https://www.kaggle.com/datasets/holmjason2/videogamedata"
         )
