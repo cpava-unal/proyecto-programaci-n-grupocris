@@ -1,9 +1,10 @@
 from functools import reduce
+from datetime import datetime
 
-setdatos = [] #Se crea una lista para caergar el csv
+setdatos = [] #Se crea una lista para cargar el csv
 
 #abrimos el archivo y lo cargamos en la lista
-with open ("gsales50.csv", "r")  as f:
+with open ("gsales.csv", "r",encoding="utf-8",errors="ignore")  as f:
     for linea in f:
         setdatos.append(linea.strip().split(","))
 
@@ -35,6 +36,7 @@ def buscar():
                 a = False
         else:
             print(f" Se encontro {x} en {cont} registros\n")
+            historial(cont, x)
             print(" Si desea seguir buscando? (si/no)")
             print(" Ingresar algo distinto a estos dos, se volvera al menu principal")
             sino = input().lower()
@@ -167,7 +169,7 @@ def estadist():
             for j in range(1,len(setdatos[1:])+1):
                 calculo.append(setdatos[j][5])
             calcfloat = [float(x) for x in calculo if x.strip() != '']
-            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            promc = (reduce(lambda x,y:x+y,calcfloat)/len(calcfloat))
             maxc = max(calcfloat)
             minc = min(calcfloat)
             print("\n  [---RESULTADO CRITICOS---]\n"
@@ -181,7 +183,7 @@ def estadist():
             for j in range(1,len(setdatos[1:])+1):
                 calculo.append(setdatos[j][6])
             calcfloat = [float(x) for x in calculo if x.strip() != '']
-            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            promc = (reduce(lambda x,y:x+y,calcfloat)/len(calcfloat))
             maxc = max(calcfloat)
             minc = min(calcfloat)
             print("\n  [---RESULTADO USUARIOS---]\n"
@@ -192,10 +194,10 @@ def estadist():
                    )
             calculo = []
         elif option == "3":
-            for j in range(1,len(setdatos[1:])+1):
+            for j in range(1,len(setdatos[1:]+1)):
                 calculo.append(setdatos[j][7])
             calcfloat = [float(x) for x in calculo if x.strip() != '']
-            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            promc = (reduce(lambda x,y:x+y,calcfloat)/len(calcfloat))
             maxc = max(calcfloat)
             minc = min(calcfloat)
             print(f"\n  [---RESULTADO VENTAS---]\n"
@@ -209,7 +211,7 @@ def estadist():
             for j in range(1,len(setdatos[1:])+1):
                 calculo.append(setdatos[j][8])
             calcfloat = [float(x) for x in calculo if x.strip() != '']
-            promc = (reduce(lambda x,y:x+y,calcfloat)/50)
+            promc = (reduce(lambda x,y:x+y,calcfloat)/len(calcfloat))
             maxc = max(calcfloat)
             minc = min(calcfloat)
             print("\n  [---RESULTADO AÑOS---]\n"
@@ -225,6 +227,18 @@ def estadist():
         else:
             print("Opción ingresada no es válida, por favor vuelve a intentarlo.")
 
+def historial(num, cont):
+    fecha = datetime.now()
+    with open("historial.csv","a+") as f:
+        f.seek(0)
+        f.write(f"{fecha.strftime("%Y-%m-%d %H:%M")},'{cont}', {num} resultados\n")
+
+def consulta_historial():
+    with open("historial.csv","r") as f:
+        f.seek(0)
+        print("\n[-----HISTORIAL CONSULTAS-----]\n")
+        for i in f.readlines():
+            print(i.strip())
 #menu principal
 
 print("\nProyecto de Programación GSales\n" 
@@ -267,5 +281,8 @@ while menu != 0:
     elif menu == "5":
         print("Cerrando Programa... Gracias por Consultar!")
         break
+    elif menu == "6":
+        consulta_historial()
     else:
         print("Opcion Invalida, Intentelo denuevo. ")
+
