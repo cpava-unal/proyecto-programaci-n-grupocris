@@ -4,10 +4,9 @@ from datetime import datetime
 setdatos = [] #Se crea una lista para cargar el csv
 
 #abrimos el archivo y lo cargamos en la lista
-with open ("gsales50.csv", "r",encoding="utf-8",errors="ignore")  as f:
+with open ("gsales.csv", "r",encoding="utf-8",errors="ignore")  as f:
     for linea in f:
         setdatos.append(linea.strip().split(","))
-
 #Funcion busqueda
 def buscar():
     a = True
