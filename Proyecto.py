@@ -4,22 +4,24 @@ from datetime import datetime
 setdatos = [] #Se crea una lista para cargar el csv
 
 #abrimos el archivo y lo cargamos en la lista
-with open ("gsales.csv", "r",encoding="utf-8",errors="ignore")  as f:
+with open ("gsales50.csv", "r",encoding="utf-8",errors="ignore")  as f:
     for linea in f:
         setdatos.append(linea.strip().split(","))
 
-#Funciones
+#Funcion busqueda
 def buscar():
     a = True
     while a:
         x = input("Ingrese que desea buscar: ").lower()
         cont = 0
+        encontrados = []
         print(" | ".join(setdatos[0]))
         for i in range(len(setdatos)):
             for y in setdatos[i]:
                 if x in y.lower():
                     if x == y.lower():
                         cont += 1
+                        encontrados.append(setdatos[i])
                         print(" | ".join(setdatos[i]))
                         break
         if cont == 0:
@@ -37,6 +39,7 @@ def buscar():
         else:
             print(f" Se encontro {x} en {cont} registros\n")
             historial(cont, x)
+            guardar_resultados(encontrados)
             print(" Si desea seguir buscando? (si/no)")
             print(" Ingresar algo distinto a estos dos, se volvera al menu principal")
             sino = input().lower()
@@ -48,6 +51,43 @@ def buscar():
                 print(" Opcion invalida, volviendo al menu principal...")
                 a = False
 
+#funcion guardado de resultados
+def guardar_resultados(resultados):
+    if not resultados:
+        print ("No hay resultados para guardar")
+        return
+    resp = input("\n¿Quiere guardar los resultados? (si/no): ").strip()
+    if resp.lower() != "si":
+        print ("No se guardaron los resultados")
+        return
+    nombre = input("Ingrese el nombre con el que lo quiere guardar (ej: mejores.csv): ").strip()
+    if not nombre.endswith(".csv"):
+        nombre += ".csv"
+    with open(nombre, "w", encoding="utf-8") as f:
+        f.write(",".join(setdatos[0]) + "\n")
+        for fila in resultados:
+            f.write(",".join(fila) + "\n")
+    print(f"Resultados guardados exitosamente en: '{nombre}'")
+
+#Funcion cargar resultados
+def cargar_resultados():
+    nombre = input("Ingrese el nombre del archivo que va cargar (ej: mejores.csv): ").strip()
+    if not nombre.endswith(".csv"):
+        nombre += ".csv"
+    try:
+        with open(nombre, "r", encoding="utf-8") as f:
+            filas = list(csv.reader(f))
+    except FileNotFoundError:
+        print(f"No se encontró el archivo '{nombre}'\nAsegúrese de que el nombre sea correcto y que el archivo exista")
+        return []
+    if len(filas) <= 1:
+        print("El archivo está vacío o solo tiene el encabezado")
+        return []
+    print(f"-----Se cargaron {len(filas) - 1} registros desde '{nombre}'-----")
+    print(" | ".join(filas[0]))
+    for fila in filas[1:]:
+        print(" | ".join(fila))
+    return filas[1:]
 
 #Función filtrar 
 def filtrar_por_condicion_numerica(datos, indice_columna, valor_limite):
@@ -266,7 +306,8 @@ while menu != 0:
                 "2. Filtrar Por condicion\n"
                 "3. Consular Top Juegos Vendidos\n"
                 "4. Estadisticas\n"
-                "5. Salir\n"
+                "6. Cargar los reultados\n"
+                "7. Salir\n"
                 "Ingrese Una Opcion: ")
     
     if menu == "1":
@@ -279,10 +320,12 @@ while menu != 0:
     elif menu == "4":
         estadist()
     elif menu == "5":
+        consulta_historial()
+    elif menu == "6":
+        cargar_resultados()
+    elif menu == "7":
         print("Cerrando Programa... Gracias por Consultar!")
         break
-    elif menu == "6":
-        consulta_historial()
     else:
         print("Opcion Invalida, Intentelo denuevo. ")
 
