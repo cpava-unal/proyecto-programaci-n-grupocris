@@ -1,5 +1,6 @@
 from functools import reduce
 from datetime import datetime
+import csv
 
 setdatos = [] #Se crea una lista para cargar el csv
 
@@ -305,6 +306,7 @@ while menu != 0:
                 "2. Filtrar Por condicion\n"
                 "3. Consular Top Juegos Vendidos\n"
                 "4. Estadisticas\n"
+                "5. Historial\n"
                 "6. Cargar los reultados\n"
                 "7. Salir\n"
                 "Ingrese Una Opcion: ")
