@@ -1,6 +1,7 @@
 from functools import reduce
 from datetime import datetime
 import csv
+import json 
 
 setdatos = [] #Se crea una lista para cargar el csv
 
@@ -212,7 +213,7 @@ def estadist():
             promc = (reduce(lambda x,y:x+y,calcfloat)/len(calcfloat))
             maxc = max(calcfloat)
             minc = min(calcfloat)
-            print("\n  [---RESULTADO CRITICOS---]\n"
+            print("\n  [-RESULTADO CRITICOS-]\n"
                   "  Para las puntuaciones de los críticos, tenemos:\n"
                   f"  El promedio: {promc:.1f}\n"
                   f"  El número máximo: {maxc}\n"
@@ -226,7 +227,7 @@ def estadist():
             promc = (reduce(lambda x,y:x+y,calcfloat)/len(calcfloat))
             maxc = max(calcfloat)
             minc = min(calcfloat)
-            print("\n  [---RESULTADO USUARIOS---]\n"
+            print("\n  [-RESULTADO USUARIOS-]\n"
                    "  Para las puntuaciones de los usuarios, tenemos:\n"
                    f"  El promedio: {promc:.1f}\n"
                    f"  El número máximo: {maxc}\n"
@@ -240,7 +241,7 @@ def estadist():
             promc = (reduce(lambda x,y:x+y,calcfloat)/len(calcfloat))
             maxc = max(calcfloat)
             minc = min(calcfloat)
-            print(f"\n  [---RESULTADO VENTAS---]\n"
+            print(f"\n  [-RESULTADO VENTAS-]\n"
                     "  Para las ventas totales, tenemos:\n"
                     f"  El promedio: {promc:.1f}\n"
                     f"  El número máximo: {maxc}\n"
@@ -254,7 +255,7 @@ def estadist():
             promc = (reduce(lambda x,y:x+y,calcfloat)/len(calcfloat))
             maxc = max(calcfloat)
             minc = min(calcfloat)
-            print("\n  [---RESULTADO AÑOS---]\n"
+            print("\n  [-RESULTADO AÑOS-]\n"
                 "  Para los años de publicación, tenemos:\n"
                 f"  El promedio: {promc:.1f}\n"
                 f"  El número máximo: {maxc:.0f}\n"
@@ -276,9 +277,96 @@ def historial(num, cont):
 def consulta_historial():
     with open("historial.csv","r") as f:
         f.seek(0)
-        print("\n[-----HISTORIAL CONSULTAS-----]\n")
+        print("\n[--HISTORIAL CONSULTAS--]\n")
         for i in f.readlines():
             print(i.strip())
+
+def generar_resumen_json(datos, ruta_salida="resumen.json"):
+    if not datos or len(datos) <= 1:
+        print("El dataset está vacío o solo contiene encabezados.")
+        return None
+
+    filas = datos[1:]
+
+    plataformas_unicas = set()
+    generos_unicos = set()
+    desarrolladores_unicos = set()
+
+    ventas = []
+    critic_scores = []
+    user_scores = []
+    anios = []
+
+    for fila in filas:
+        if len(fila) < 9:
+            continue
+
+        if fila[2].strip():
+            plataformas_unicas.add(fila[2].strip())
+        if fila[3].strip():
+            generos_unicos.add(fila[3].strip())
+        if fila[4].strip():
+            desarrolladores_unicos.add(fila[4].strip())
+
+        try:
+            critic_scores.append(float(fila[5].strip()))
+        except ValueError:
+            pass
+
+        try:
+            user_scores.append(float(fila[6].strip()))
+        except ValueError:
+            pass
+
+        try:
+            ventas.append(float(fila[7].strip()))
+        except ValueError:
+            pass
+
+        try:
+            anios.append(int(float(fila[8].strip())))
+        except ValueError:
+            pass
+
+    resumen = {
+        "total_registros": len(filas),
+        "categorias_unicas": {
+            "total_plataformas": len(plataformas_unicas),
+            "total_generos": len(generos_unicos),
+            "total_desarrolladores": len(desarrolladores_unicos),
+            "lista_plataformas": sorted(list(plataformas_unicas)),
+            "lista_generos": sorted(list(generos_unicos))
+        },
+        "ventas_millones": {
+            "maximo": max(ventas) if ventas else 0.0,
+            "minimo": min(ventas) if ventas else 0.0,
+            "promedio": round(sum(ventas) / len(ventas), 2) if ventas else 0.0
+        },
+        "calificacion_criticos": {
+            "maximo": max(critic_scores) if critic_scores else 0.0,
+            "minimo": min(critic_scores) if critic_scores else 0.0,
+            "promedio": round(sum(critic_scores) / len(critic_scores), 2) if critic_scores else 0.0
+        },
+        "calificacion_usuarios": {
+            "maximo": max(user_scores) if user_scores else 0.0,
+            "minimo": min(user_scores) if user_scores else 0.0,
+            "promedio": round(sum(user_scores) / len(user_scores), 2) if user_scores else 0.0
+        },
+        "periodo_anios": {
+            "mas_antiguo": min(anios) if anios else 0,
+            "mas_reciente": max(anios) if anios else 0
+        }
+    }
+
+    try:
+        with open(ruta_salida, "w", encoding="utf-8") as f:
+            json.dump(resumen, f, indent=4, ensure_ascii=False)
+        print(f"Resumen automático generado en '{ruta_salida}'.")
+    except Exception as e:
+        print(f"Error al generar '{ruta_salida}': {e}")
+
+    return resumen
+
 #menu principal
 
 print("\nProyecto de Programación GSales\n" 
@@ -292,6 +380,8 @@ print("\nProyecto de Programación GSales\n"
         "\n DataSet Escogido: Video Game Sales Data\n"
         " link: https://www.kaggle.com/datasets/holmjason2/videogamedata"
         )
+generar_resumen_json(setdatos)
+
 #Menu principal
 """
 El menu donde se ejecutan las funciones
