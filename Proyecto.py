@@ -370,7 +370,7 @@ def generar_resumen_json(datos, ruta_salida="resumen.json"):
 #menu principal
 
 print("\nProyecto de Programación GSales\n" 
-        "Primera Entrega\n"
+        "Segunda Entrega\n"
         "\n Integrantes:"
         "\n   Edwin Andres Niño Garcia"
         "\n   Henry Andres Fernandez Lozano"
